@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Update A Product</title>
+    <link rel="stylesheet" href="update-product.css" />
+  </head>
+  <body>
+    <div id="updateAProduct">
+      <h2>Add A Product</h2>
+      <input
+        type="text"
+        id="productName"
+        placeholder="Enter product name"
+        required
+      />
+      <input
+        type="text"
+        id="productDesc"
+        placeholder="Enter product description"
+        required
+      />
+      <input
+        type="text"
+        id="productCat"
+        placeholder="Enter product category"
+        required
+      />
+      <input
+        type="number"
+        id="productPrice"
+        placeholder="Enter product price"
+        required
+      />
+      <input
+        type="url"
+        id="productImage"
+        placeholder="Enter product image URL"
+        required
+      />
+      <button id="updateProd">Update Product</button>
+      <p id="errorMessage"></p>
+    </div>
+    <script type="module" src="update-product.js"></script>
+  </body>
+</html>
