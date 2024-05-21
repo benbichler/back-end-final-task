@@ -8,15 +8,10 @@ import {
   collection,
   getDocs,
   updateDoc,
-<<<<<<< HEAD
   getDoc,
   query,
   where,
   doc,
-=======
-  query,
-  where,
->>>>>>> c34bcf1c9e09fe03c4c927c4e8bb4e7098677fc9
 } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -32,11 +27,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig); // Reuse the same config as above
 const auth = getAuth(app);
 const db = getFirestore(app);
-<<<<<<< HEAD
 const urlParams = new URLSearchParams(window.location.search);
 const productId = urlParams.get("id");
-=======
->>>>>>> c34bcf1c9e09fe03c4c927c4e8bb4e7098677fc9
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
@@ -46,7 +38,6 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-<<<<<<< HEAD
 async function fetchProductDetails() {
   const productRef = doc(db, "products", productId);
   try {
@@ -69,8 +60,6 @@ async function fetchProductDetails() {
 
 fetchProductDetails();
 
-=======
->>>>>>> c34bcf1c9e09fe03c4c927c4e8bb4e7098677fc9
 async function updateProduct() {
   const productName = document.getElementById("productName").value;
   const productDesc = document.getElementById("productDesc").value;
@@ -98,12 +87,8 @@ async function updateProduct() {
     console.log(productDesc);
     console.log(productCat);
     try {
-<<<<<<< HEAD
       const productRef = doc(db, "products", productId);
       await updateDoc(productRef, productData);
-=======
-      await updateDoc(collection(db, "products"), productData);
->>>>>>> c34bcf1c9e09fe03c4c927c4e8bb4e7098677fc9
       alert(
         `${productName} has been updated successfully. Moving you to main-dashboard page.`
       );
@@ -117,12 +102,5 @@ async function updateProduct() {
     document.getElementById("productPrice").value = "";
     document.getElementById("productImage").value = "";
   }
-<<<<<<< HEAD
 }
 document.getElementById("updateProd").addEventListener("click", updateProduct);
-=======
-  document
-    .getElementById("updateProd")
-    .addEventListener("click", updateProduct);
-}
->>>>>>> c34bcf1c9e09fe03c4c927c4e8bb4e7098677fc9

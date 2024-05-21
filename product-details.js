@@ -9,10 +9,7 @@ import {
   collection,
   getDoc,
   updateDoc,
-<<<<<<< HEAD
   deleteDoc,
-=======
->>>>>>> c34bcf1c9e09fe03c4c927c4e8bb4e7098677fc9
   query,
   where,
 } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
@@ -32,23 +29,16 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const urlParams = new URLSearchParams(window.location.search);
 const productId = urlParams.get("id");
-<<<<<<< HEAD
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
     displayProductDetails(productId);
-=======
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    displayProductDetails();
->>>>>>> c34bcf1c9e09fe03c4c927c4e8bb4e7098677fc9
   } else {
     window.location.href = "log-in.html"; // Redirect to sign-in page if not authenticated
   }
 });
 
 async function displayProductDetails(productId) {
-<<<<<<< HEAD
   const productDetailsContainer = document.getElementById("product-container");
   productDetailsContainer.innerHTML = "";
   const productRef = doc(db, "products", productId);
@@ -76,15 +66,6 @@ async function displayProductDetails(productId) {
     } else {
       productDetailsContainer.innerText = "No such product found.";
     }
-=======
-  const productDetailsContainer = document.getElementById(
-    "product-details-container"
-  );
-  productDetailsContainer.innerHTML = "";
-
-  const productRef = doc(db, "products", productId);
-  try {
->>>>>>> c34bcf1c9e09fe03c4c927c4e8bb4e7098677fc9
   } catch (error) {
     console.error("Error fetching product details:", error.message);
     productDetailsContainer.innerText = "Error fetching product details.";
@@ -93,7 +74,6 @@ async function displayProductDetails(productId) {
 
 displayProductDetails(productId);
 
-<<<<<<< HEAD
 async function deleteProduct(productId) {
   console.log("Deleting product with ID:", productId);
   try {
@@ -101,11 +81,6 @@ async function deleteProduct(productId) {
     console.log("Product deleted successfully.");
     alert(`Product has been deleted. Moving you back to main-dashboard.`);
     window.location.href = "main-dashboard.html";
-=======
-async function deteleProduct(productId) {
-  try {
-    await deleteDoc(doc(db, "products", productId));
->>>>>>> c34bcf1c9e09fe03c4c927c4e8bb4e7098677fc9
   } catch (error) {
     console.error("Error deleting product: ", error.message);
   }
@@ -113,18 +88,11 @@ async function deteleProduct(productId) {
 
 document
   .getElementById("delete-product-btn")
-<<<<<<< HEAD
   .addEventListener("click", () => deleteProduct(productId));
 
 function redirectToUpdateProd() {
   let url = `update-product.html?id=${productId}`;
   window.location.href = url;
-=======
-  .addEventListener("click", deteleProduct);
-
-function redirectToUpdateProd() {
-  window.location.href = "update-product.html";
->>>>>>> c34bcf1c9e09fe03c4c927c4e8bb4e7098677fc9
 }
 // Attach the named function to the click event of the create-account button
 document
