@@ -29,7 +29,7 @@ async function handleSignIn() {
     const user = userCredential.user;
     console.log("User signed in:", user);
     alert(`Welcome ${user.email}! Moving you to main dashboard!`);
-    window.location.href = "main-dashboard.html"; // Redirecting user to main-dashboard page upon logging in.
+    window.location.href = `main-dashboard.html?userId=${user.uid}`; // Redirecting user to main-dashboard page upon logging in.
   } catch (error) {
     const errorCode = error.code;
     const errorMessage = error.message;

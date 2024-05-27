@@ -35,31 +35,121 @@ onAuthStateChanged(auth, (user) => {
 });
 
 async function displayProducts() {
-  const productsContainer = document.getElementById("products-container");
-  productsContainer.innerHTML = "";
+  const urlParams = new URLSearchParams(window.location.search);
+  const userId = urlParams.get("userId");
   const productsRef = collection(db, "products");
+  const productsContainer = document.getElementById("products-container");
+
   try {
     const querySnapshot = await getDocs(productsRef);
     querySnapshot.forEach((doc) => {
       const product = doc.data();
       const productDiv = document.createElement("div");
-      const productImg = Array.isArray(product.productImage)
-        ? product.productImage
-            .map(
-              (imgUrl) =>
-                `<img src="${imgUrl}" alt="Product Image" style="max-width: 100px; max-height: 100px; cursor: pointer;">`
-            )
-            .join("")
-        : `<img src="${product.productImage}" alt="Product Image" style="max-width: 100px; max-height: 100px; cursor: pointer;">`;
 
-      productDiv.innerHTML = `<strong>Name:</strong> <a href="product-details.html?id=${doc.id}">${product.productName}</a> <br><strong>Description:</strong> ${product.productDesc}<br><strong>Category:</strong> ${product.productCat}<br><strong>Price:</strong> ${product.productPrice}<br><strong>Images:</strong><br><a href="product-details.html?id=${doc.id}">${productImg}</a>`;
+      if (product.productImage && product.productImage.length > 0) {
+        let imagesHtml = "";
+        product.productImage.forEach((imageUrl) => {
+          imagesHtml += `<a href="product-details.html?productId=${doc.id}&userId=${userId}"><img src="${imageUrl}" alt="${product.productName} image" style="max-width: 100px; max-height: 100px; cursor: pointer;"></a>`;
+        });
+        productDiv.innerHTML = `
+      <strong>Name:</strong> <a href="product-details.html?productId=${doc.id}&userId=${userId}">${product.productName}</a>
+       <br>
+       <strong>Description:</strong> ${product.productDesc}
+       <br>
+       <strong>Category:</strong> ${product.productCat}
+       <br>
+       <strong>Price:</strong> ${product.productPrice}
+       <br>
+       <strong>Images:</strong> ${imagesHtml}`;
+      } else {
+        // Handling case where there are no images for the product.
+        productDiv.innerHTML = `
+      <strong>Name:</strong> <a href="product-details.html?productId=${doc.id}&userId=${userId}">${product.productName}</a>
+       <br>
+       <strong>Description:</strong> ${product.productDesc}
+       <br>
+       <strong>Category:</strong> ${product.productCat}
+       <br>
+       <strong>Price:</strong> ${product.productPrice}
+       <br>
+       <strong>Images:</strong> There are no available images for this certain product.`;
+      }
       productsContainer.appendChild(productDiv);
     });
+
+    if (querySnapshot.empty) {
+      {
+        productsContainer.innerHTML = "No products found";
+      }
+    }
   } catch (error) {
     console.error("Error fetching products:", error.message);
     productsContainer.innerText = "Error fetching products.";
   }
 }
+
+async function filterProducts() {
+  const categoryFilter = document.getElementById("category-filter").value;
+  const priceFilter = document.getElementById("price-filter").value;
+  const productsRef = collection(db, "products");
+  const productsContainer = document.getElementById("products-container");
+
+  let q = query(productsRef);
+  if (categoryFilter) {
+    q = query(productsRef, where("productCat", "==", categoryFilter));
+  }
+
+  if (priceFilter) {
+    q = query(productsRef, where("productCat", "==", parseFloat(priceFilter)));
+  }
+  try {
+    const querySnapshot = await getDocs(q);
+    productsContainer.innerHTML = "";
+    if (querySnapshot.empty) {
+      productsContainer.innerHTML = "No products found in chosen category.";
+      return;
+    }
+
+    querySnapshot.forEach((doc) => {
+      const product = doc.data();
+      const productDiv = document.createElement("div");
+      if (product.productImage && product.productImage.length > 0) {
+        let imagesHtml = "";
+        product.productImage.forEach((imageUrl) => {
+          imagesHtml += `<a href="product-details.html?productId=${doc.id}&userId=${userId}"><img src="${imageUrl}" alt="${product.productName} image" style="max-width: 100px; max-height: 100px; cursor: pointer;"></a>`;
+        });
+        productDiv.innerHTML = `
+      <strong>Name:</strong> <a href="product-details.html?productId=${doc.id}&userId=${userId}">${product.productName}</a>
+       <br>
+       <strong>Description:</strong> ${product.productDesc}
+       <br>
+       <strong>Category:</strong> ${product.productCat}
+       <br>
+       <strong>Price:</strong> ${product.productPrice}
+       <br>
+       <strong>Images:</strong> ${imagesHtml}`;
+      } else {
+        // Handling case where there are no images for the product.
+        productDiv.innerHTML = `
+      <strong>Name:</strong> <a href="product-details.html?productId=${doc.id}&userId=${userId}">${product.productName}</a>
+       <br>
+       <strong>Description:</strong> ${product.productDesc}
+       <br>
+       <strong>Category:</strong> ${product.productCat}
+       <br>
+       <strong>Price:</strong> ${product.productPrice}
+       <br>
+       <strong>Images:</strong> There are no available images for this certain product.`;
+      }
+      productsContainer.appendChild(productDiv);
+    });
+  } catch (error) {
+    console.error("Error fetching products: ", error.message);
+    productsContainer.innerHTML = "Error fetching products.";
+  }
+}
+
+document.getElementById("filter-btn").addEventListener("click", filterProducts);
 
 function redirectToAddProductForm() {
   window.location.href = "add-product.html";
@@ -86,6 +176,7 @@ async function addRandomProduct() {
     const productCat = randomProduct.category;
     const productPrice = randomProduct.price;
     const productImage = randomProduct.images;
+    const user = auth.currentUser;
 
     const productData = {
       productName,
@@ -93,6 +184,7 @@ async function addRandomProduct() {
       productCat,
       productPrice,
       productImage,
+      userId: user.uid,
     };
 
     await addDoc(collection(db, "products"), productData);
