@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Main Dashboard - Products</title>
+    <link rel="stylesheet" href="main-dashboard.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h2>List of Products</h2>
+      <div id="products-container"></div>
+      <div id="filter-container">
+        <input
+          type="text"
+          id="category-filter"
+          placeholder="Filter by Category"
+        />
+        <input type="number" id="price-filter" placeholder="Filter by Price" />
+        <button id="filter-btn">Filter</button>
+      </div>
+      <button id="add-product-btn">Add Product</button>
+      <button id="add-random-product-btn">Add A Random Product</button>
+    </div>
+    <script type="module" src="main-dashboard.js"></script>
+  </body>
+</html>
