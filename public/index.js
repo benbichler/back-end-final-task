@@ -33,12 +33,18 @@ async function handleSignIn() {
   } catch (error) {
     const errorCode = error.code;
     const errorMessage = error.message;
-    if (errorCode === "auth/invalid-credential") {
-      document.getElementById("errorMessage").textContent =
-        "User doesn't exist in our system. Please try again.";
+
+    if (errorCode === "auth/user-not-found") {
+      errorMessage = "User doesn't exist in our system. Please try again.";
+    } else if (errorCode === "auth/wrong-password") {
+      errorMessage = "Incorrect password. Please try again.";
+    } else if (errorCode === "auth/invalid-email") {
+      errorMessage = "Invalid email format. Please check your email.";
     } else {
-      document.getElementById("errorMessage").textContent = errorMessage;
+      errorMessage = error.message;
     }
+
+    document.getElementById("errorMessage").textContent = errorMessage;
     console.error("Error signing in:", errorMessage);
   }
 }
