@@ -44,7 +44,7 @@ async function handleSignIn() {
       errorMessage = error.message;
     }
 
-    document.getElementById("errorMessage").textContent = errorMessage;
+    document.getElementById("errorMessage").innerText = errorMessage;
     console.error("Error signing in:", errorMessage);
   }
 }
